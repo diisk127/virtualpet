@@ -1,9 +1,10 @@
+## Project Structure
+```plaintext
 virtual_pet/
 │── app.py
-│── pet_state.json   (สร้างไฟล์เปล่าไว้ก่อนใส่ `{}`)
+│── pet_state.json
 │── static/
 │   ├── style.css
 │   └── script.js
 │── templates/
 │   └── index.html
-
