@@ -4,48 +4,89 @@
   <meta charset="UTF-8">
   <title>Virtual Pet</title>
   <style>
-    /* ====== CSS จากคุณรวมแล้ว ====== */
     body {
       margin: 0;
       padding: 0;
-      background: url("https://i.pinimg.com/1200x/f7/a1/8e/f7a18ee3567d8b7ddee1f46b26f89e1c.jpg") no-repeat center center fixed;
+      background: url("https://i.pinimg.com/736x/60/95/e1/6095e1e0a2231461c0e3bead590afef4.jpg") no-repeat center center fixed;
       background-size: cover;
       font-family: "Arial", sans-serif;
     }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      margin-top: 50px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 20px;
-      padding: 30px;
+    header {
       text-align: center;
+      padding: 20px 0;
+      color: #fff;
     }
 
-    .status {
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      font-family: 'Poppins', sans-serif;
+      color: #a44512;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 1em;
+      color: #000000;
+    }
+
+    /* กล่องโปร่งครอบแท่งสถานะ */
+    .container {
+      max-width: 800px;
+      margin: 20px auto 5px auto;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
+      padding: 20px;
       text-align: left;
+    }
+
+    /* แบ่งแท่งเป็น 2 คอลัมน์ */
+    .status {
+      display: flex;
+      justify-content: space-between;
       margin: 20px 0;
     }
 
-    .status label {
-      display: block;
-      font-weight: bold;
+    .status-column {
+      display: flex;
+      flex-direction: column;
+      width: 45%;
+    }
+
+    .status-column label {
       margin-top: 10px;
+      font-weight: bold;
     }
 
     progress {
       width: 100%;
-      height: 20px;
+      height: 40px;
+      margin-bottom: 15px;
+    }
+
+    /* ส่วนรูปสัตว์เลี้ยงและปุ่ม */
+    .pet-section {
+      max-width: 900px;
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .pet-image img {
+      margin: 20px auto;
+      border-radius: 50%;
+      width: 150px;
     }
 
     .buttons button {
       margin: 10px;
-      padding: 10px 20px;
+      padding: 15px 20px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 17px;
+      background: #f8df8e; 
+      color: #000000;
     }
 
     #actionMessage {
@@ -54,132 +95,87 @@
       font-weight: bold;
     }
 
-    .pet-image img {
-      margin: 20px 0;
-      border-radius: 50%;
-      width: 150px;
-    }
-
+    /* ข้อมูล Cat Facts */
     #cat-info {
       margin-top: 30px;
       background: #fff3e0;
       padding: 15px;
       border-radius: 15px;
-    }
-
-    header {
       text-align: center;
-      padding: 20px 0;
-      color: #fff;
-      text-shadow: 2px 2px #333;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2em;
-    }
-
-    header p {
-      margin: 5px 0 0;
-      font-size: 1em;
-    }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
-    <h1>🐾 My Virtual Pet</h1>
-    <p>Take care of your pet and learn fun cat facts!</p>
+    <h1>Welcome To My Virtual Pet</h1>
+    <p>Take care of your pet!</p>
   </header>
 
-  <!-- Main container -->
+  <!-- กล่องขาวโปร่งสำหรับแท่งสถานะ -->
   <div class="container">
-    <!-- Stats -->
     <div class="status">
-      <label>Hunger</label>
-      <progress id="hungerBar" value="{{ pet['hunger'] }}" max="100"></progress>
-      <span id="hungerText">{{ pet['hunger'] }}</span>
-      
-      <label>Mood</label>
-      <progress id="moodBar" value="{{ pet['mood'] }}" max="100"></progress>
-      <span id="moodText">{{ pet['mood'] }}</span>
-      
-      <label>Hygiene</label>
-      <progress id="hygieneBar" value="{{ pet['hygiene'] }}" max="100"></progress>
-      <span id="hygieneText">{{ pet['hygiene'] }}</span>
+      <!-- ฝั่งซ้าย -->
+      <div class="status-column">
+        <label>Hunger</label>
+        <progress id="hungerBar" value="{{ pet['hunger'] }}" max="100"></progress>
 
-      <label>Energy</label>
-      <progress id="energyBar" value="{{ pet['energy'] }}" max="100"></progress>
-      <span id="energyText">{{ pet['energy'] }}</span>
+        <label>Mood</label>
+        <progress id="moodBar" value="{{ pet['mood'] }}" max="100"></progress>
+      </div>
+
+      <!-- ฝั่งขวา -->
+      <div class="status-column">
+        <label>Hygiene</label>
+        <progress id="hygieneBar" value="{{ pet['hygiene'] }}" max="100"></progress>
+
+        <label>Energy</label>
+        <progress id="energyBar" value="{{ pet['energy'] }}" max="100"></progress>
+      </div>
     </div>
+  </div>
 
-    <!-- Pet image -->
+  <!-- รูปนอกกล่องขาว (ใต้กล่อง) --> 
+   <div class="pet-image-outside" style="text-align:center; margin:20px 0;"> 
+    <img src="/static/MagicEraser_5681003_232719.PNG" alt="pet outside" width="200"> 
+  </div>
+
+  <!-- ส่วนรูปสัตว์เลี้ยง + ปุ่ม -->
+  <div class="pet-section">
     <div class="pet-image">
-      <img id="petImg" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="pet">
     </div>
 
-    <!-- Interaction buttons -->
     <div class="buttons">
-      <button onclick="interact('feed')">🍖 Feed</button>
-      <button onclick="interact('shower')">🛁 Shower</button>
-      <button onclick="interact('play')">🎮 Play</button>
-      <button onclick="interact('pet')">🐾 Pet</button>
+      <button onclick="interact('feeding')">🍖 Feed</button>
+      <button onclick="interact('showering')">🛁 Shower</button>
+      <button onclick="interact('playing')">🎮 Play</button>
+      <button onclick="interact('resting')">💤 Rest</button>
     </div>
 
-    <!-- Action message -->
-    <div id="actionMessage"></div>
 
     <!-- Cat Facts -->
     <div id="cat-info">
-      <h2>🐱 Fun Cat Fact</h2>
+      <h2>🐱 Your Pet State 🐱</h2>
+      <p id="factText"> Give your kitty a status update! </p>
     </div>
   </div>
 
   <!-- Scripts -->
   <script>
-    // ฟังก์ชันโต้ตอบกับ pet
-    function interact(action) {
-      fetch("/interact/" + action)
-        .then(response => response.json())
-        .then(pet => {
-          document.getElementById("hungerBar").value = pet.hunger;
-          document.getElementById("hungerText").innerText = pet.hunger;
-          document.getElementById("moodBar").value = pet.mood;
-          document.getElementById("moodText").innerText = pet.mood;
-          document.getElementById("hygieneBar").value = pet.hygiene;
-          document.getElementById("hygieneText").innerText = pet.hygiene;
-          document.getElementById("energyBar").value = pet.energy;
-          document.getElementById("energyText").innerText = pet.energy;
-        });
-    }
+  function interact(action) {
+    fetch("/interact/" + action)
+      .then(response => response.json())
+      .then(pet => {
+        document.getElementById("hungerBar").value = pet.hunger;
+        document.getElementById("moodBar").value = pet.mood;
+        document.getElementById("hygieneBar").value = pet.hygiene;
+        document.getElementById("energyBar").value = pet.energy;
 
-    // ฟังก์ชันดึง Cat Fact
-    function getCatFact() {
-      fetch('/cat_fact')
-        .then(response => response.json())
-        .then(data => {
-          const catDiv = document.getElementById('cat-info');
-          catDiv.innerHTML = "<h2>🐱 Fun Cat Fact</h2>";
-          const factElement = document.createElement('p');
-          factElement.textContent = data.fact;
-          catDiv.appendChild(factElement);
-        });
-    }
-
-    // ฟังก์ชันดึงรูป pet
-    function updatePetImage() {
-      fetch('/pet_image')
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('petImg').src = data.image_url;
-        });
-    }
-
-    // โหลดครั้งแรก
-    window.onload = function() {
-      getCatFact();
-      updatePetImage();
-    };
-  </script>
+        // เปลี่ยนจาก actionMessage → factText
+        document.getElementById("factText").innerText = "Your pet is " + action + "!";
+      });
+  }
+</script>
 </body>
 </html>
