@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Virtual Pet</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: url("https://i.pinimg.com/736x/60/95/e1/6095e1e0a2231461c0e3bead590afef4.jpg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: "Arial", sans-serif;
+  }
+
+  header {
+    text-align: center;
+    padding: 20px 0;
+    color: #fff;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 3em;
+    font-family: 'Poppins', sans-serif;
+    color: #a44512;
+  }
+
+  header p {
+    margin: 5px 0 0;
+    font-size: 1.5em;
+    color: #000000;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 20px auto 5px auto;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: left;
+  }
+
+  .status {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+
+  .status-column {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+  }
+
+  .status-column label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  progress {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 15px;
+    transition: all 0.5s ease;
+  }
+
+  .pet-section {
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
+  }
+
+  .buttons button {
+    margin: 10px;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    background: #f8df8e; 
+    color: #000000;
+  }
+
+  .buttons button:hover {
+    transform: scale(1.1);
+    background: #ffd700;
+  }
+
+  #factText {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  #cat-info {
+    margin-top: 30px;
+    background: #fff3e0;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .floating-emoji {
+    position: absolute;
+    font-size: 40px;
+    animation: floatUp 2s ease-out forwards;
+    user-select: none;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+  }
+
+  #petImage {
+    width: 200px;
+    transition: all 0.3s ease;
+  }
+  #petImage:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  /* ===== Pop-up Custom ===== */
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease, visibility 0.5s;
+  z-index: 9999;
+}
+
+/* กล่องข้อความ */
+.popup-content {
+  background: linear-gradient(135deg, #ffb6c1, #ffe4b5);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+  text-align: center;
+  animation: popupZoom 0.4s ease;
+  font-family: "Arial", sans-serif;
+  color: #000000;
+}
+
+/* ปุ่ม */
+.popup-content button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  border: none;
+  background: #000000;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.3s;
+}
+.popup-content button:hover {
+  background: #a44512;
+}
+
+/* แอนิเมชัน */
+@keyframes popupZoom {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* โชว์ popup */
+.popup.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>Welcome To My Virtual Pet</h1>
+  <p>Take care of your pet!</p>
+</header>
+
+<div class="container">
+  <div class="status">
+    <div class="status-column">
+      <label>Hunger</label>
+      <progress id="hunger" value="{{ pet['hunger'] }}" max="100"></progress>
+
+      <label>Mood</label>
+      <progress id="mood" value="{{ pet['mood'] }}" max="100"></progress>
+    </div>
+
+    <div class="status-column">
+      <label>Hygiene</label>
+      <progress id="hygiene" value="{{ pet['hygiene'] }}" max="100"></progress>
+
+      <label>Energy</label>
+      <progress id="energy" value="{{ pet['energy'] }}" max="100"></progress>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; margin:20px 0;"> 
+  <img src="{{ url_for('static', filename='normal_pic.png') }}" alt="pet" id="petImage" draggable="false">
+</div>
+
+<div class="pet-section">
+  <div class="buttons">
+    <button onclick="spawnEmoji(event, '🐟', 'feeding')">🐟 Feed</button>
+    <button onclick="spawnEmoji(event, '🛁', 'showering')">🛁 Shower</button>
+    <button onclick="spawnEmoji(event, '🧶', 'playing')">🧶 Play</button>
+    <button onclick="spawnEmoji(event, '💤', 'resting')">💤 Rest</button>
+  </div>
+
+  <div id="cat-info">
+    <h2>🐱 Your Pet State 🐱</h2>
+    <p id="factText">Click any button to interact with your cat!</p>
+  </div>
+</div>
+
+<!-- Pop-up Notification -->
+<div id="welcomePopup" class="popup">
+  <div class="popup-content">
+    <h2>Welcome Back!</h2>
+    <p>Give your pet an interaction 😿</p>
+    <button id="closePopup">Started!</button>
+  </div>
+</div>
+
+
+<script>
+const petImg = document.getElementById("petImage");
+const factText = document.getElementById("factText");
+
+const catImages = {
+  normal: "{{ url_for('static', filename='normal_pic.png') }}",
+  happy: "{{ url_for('static', filename='happy_pic.png') }}",
+  sleepy: "{{ url_for('static', filename='sleepy_pic.png') }}",
+  tired: "{{ url_for('static', filename='tired_pic.png') }}"
+};
+
+function spawnEmoji(event, emoji, action) {
+  const emojiElem = document.createElement("div");
+  emojiElem.textContent = emoji;
+  emojiElem.classList.add("floating-emoji");
+  document.body.appendChild(emojiElem);
+
+  const rect = event.target.getBoundingClientRect();
+  emojiElem.style.left = rect.left + window.scrollX + "px";
+  emojiElem.style.top = rect.top + window.scrollY - 20 + "px";
+
+  interact(action);
+
+  setTimeout(() => emojiElem.remove(), 2000);
+}
+
+function updatePetImage(action) {
+  switch (action) {
+    case "feeding": petImg.src = catImages.happy; break;
+    case "showering": petImg.src = catImages.normal; break;
+    case "playing": petImg.src = catImages.tired; break;
+    case "resting": petImg.src = catImages.sleepy; break;
+    default: petImg.src = catImages.normal;
+  }
+  setTimeout(() => { petImg.src = catImages.normal; }, 3000);
+}
+
+function updateFactText(action) {
+  switch (action) {
+    case "feeding": factText.textContent = "Your cat is happy!"; break;
+    case "showering": factText.textContent = "Your cat is fresh and clean!"; break;
+    case "playing": factText.textContent = "Your cat is energetic!"; break;
+    case "resting": factText.textContent = "Your cat feels restored!"; break;
+    default: factText.textContent = "Click any button to interact with your cat!";
+  }
+}
+
+function interact(action) {
+  fetch("/interact/" + action, { method: "POST" })
+    .then(response => response.json())
+    .then(pet => {
+      document.getElementById("hunger").value = pet.hunger;
+      document.getElementById("mood").value = pet.mood;
+      document.getElementById("hygiene").value = pet.hygiene;
+      document.getElementById("energy").value = pet.energy;
+      updatePetImage(action);
+      updateFactText(action);
+    });
+}
+
+// real-time decay ทุก 5 วิ (Mood, Hygiene, Energy ลด; Hunger เพิ่มตาม Mood ลด)
+setInterval(() => {
+  fetch("/update", { method: "POST" })
+    .then(res => res.json())
+    .then(pet => {
+      document.getElementById("hunger").value = pet.hunger;
+      document.getElementById("mood").value = pet.mood;
+      document.getElementById("hygiene").value = pet.hygiene;
+      document.getElementById("energy").value = pet.energy;
+    });
+}, 5000);
+
+// Pop-up Logic
+window.onload = function() {
+  const popup = document.getElementById("welcomePopup");
+  popup.classList.add("show");
+
+  // ปิด pop-up
+  document.getElementById("closePopup").onclick = function() {
+    popup.classList.remove("show");
+  };
+};
+
+</script>
+</body>
+</html>
