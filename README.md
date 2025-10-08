@@ -1,7 +1,7 @@
 # Virtual Pet Web App (Flask)
 ---
 ## Video  walktrough
- * link :
+ * link : https://drive.google.com/drive/folders/1wUEaNfzlwzsjexEqoWJxO3JoS-orwGPS?usp=sharing
 ## Grading
 
 | ชื่อ | บทบาทหลัก | Self Grade | Peer Grade | เหตุผลโดยย่อ | งาน coder (Coder tasks) |
